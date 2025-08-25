@@ -1,52 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
+<html> 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Greeting Widget</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-      font-size: 18px;
-      background: transparent; /* blends with Notion */
-      color: #ffffff;
-    }
-
-    .widget {
-      display: inline-block;
-      padding: 12px 20px;
-      border-radius: 12px;
-      background: #2c2f48; /* box color */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      font-weight: 500;
-      white-space: nowrap; /* keep everything on one line */
-    }
-  </style>
+    <title>Greeting Message</title> 
+    <style>
+#lbl {
+    font-family: monospace;
+    font-size: xx-large;
+    color: #626262;
+    padding: 5px;
+    border: 1px solid #ececec;
+    text-align: center;
+    line-height: 1.5;
+    height:85%;
+    white-space: nowrap; /* keeps all text on one line */
+}
+body{
+    background-color: aliceblue;
+}
+    </style>
 </head>
 <body>
-  <div class="widget" id="widget-text">Loading...</div>
+    <div id="lbl">Loading...</div>
+</body>
 
-  <script>
-    function updateWidget() {
-      const now = new Date();
-      const hours = now.getHours();
+<script>
+    var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
-      let greeting = "Good morning";
-      if (hours >= 12 && hours < 18) greeting = "Good afternoon";
-      else if (hours >= 18) greeting = "Good evening";
+    function updateGreeting() {
+        var today = new Date();
+        var hrs = today.getHours();
+        var dayOfWeek = weekday[today.getDay()];
 
-      const options = { month: 'long', day: 'numeric', year: 'numeric' };
-      const dateString = now.toLocaleDateString(undefined, options);
-      const timeString = now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+        // Format date
+        var dateStr = dayOfWeek + " " + today.getDate() + "/" + (today.getMonth()+1) + "/" + today.getFullYear();
 
-      document.getElementById('widget-text').textContent =
-        `${greeting}, Rachelle. Today is ${dateString}. The time is ${timeString}.`;
+        // Format time
+        var hours = today.getHours();
+        var minutes = today.getMinutes();
+        var seconds = today.getSeconds();
+        if (hours < 10) hours = "0" + hours;
+        if (minutes < 10) minutes = "0" + minutes;
+        if (seconds < 10) seconds = "0" + seconds;
+        var timeStr = hours + ":" + minutes + ":" + seconds;
+
+        // Determine greeting
+        var greet;
+        if (hrs < 12)
+            greet = 'Good Morning, ';
+        else if (hrs >= 12 && hrs <= 17)
+            greet = 'Good Afternoon, ';
+        else
+            greet = 'Good Evening, ';
+
+        // Set inline content
+        document.getElementById('lbl').textContent =
+            `${greet}Rachelle. Today is ${dateStr}. The current time is ${timeStr}`;
     }
 
-    setInterval(updateWidget, 1000);
-    updateWidget();
-  </script>
-</body>
+    setInterval(updateGreeting, 1000);
+    updateGreeting();
+</script> 
 </html>
