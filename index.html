@@ -1,62 +1,73 @@
-<html> 
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Greeting Message</title> 
-    <style>
-#lbl {
-    font-family: monospace;
-    font-size: xx-large;
-    color: #626262;
-    padding: 5px;
-    border: 1px solid #ececec;
-    text-align: center;
-    line-height: 1.5;
-    height:85%;
-    white-space: nowrap; /* keeps all text on one line */
-}
-body{
-    background-color: aliceblue;
-}
-    </style>
-</head>
-<body>
-    <div id="lbl">Loading...</div>
-</body>
-
-<script>
-    var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
-    function updateGreeting() {
-        var today = new Date();
-        var hrs = today.getHours();
-        var dayOfWeek = weekday[today.getDay()];
-
-        // Format date
-        var dateStr = dayOfWeek + " " + today.getDate() + "/" + (today.getMonth()+1) + "/" + today.getFullYear();
-
-        // Format time
-        var hours = today.getHours();
-        var minutes = today.getMinutes();
-        var seconds = today.getSeconds();
-        if (hours < 10) hours = "0" + hours;
-        if (minutes < 10) minutes = "0" + minutes;
-        if (seconds < 10) seconds = "0" + seconds;
-        var timeStr = hours + ":" + minutes + ":" + seconds;
-
-        // Determine greeting
-        var greet;
-        if (hrs < 12)
-            greet = 'Good Morning, ';
-        else if (hrs >= 12 && hrs <= 17)
-            greet = 'Good Afternoon, ';
-        else
-            greet = 'Good Evening, ';
-
-        // Set inline content
-        document.getElementById('lbl').textContent =
-            `${greet}Rachelle. Today is ${dateStr}. The current time is ${timeStr}`;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inline Greeting Widget</title>
+<style>
+    body {
+        font-variant-caps: all-petite-caps;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: aliceblue;
     }
 
-    setInterval(updateGreeting, 1000);
-    updateGreeting();
-</script> 
+    .widget {
+        padding: 10px 15px;
+        color: #000000;
+        border: 3px solid #000000;
+        border-radius: 5px;
+        box-shadow: 2px 2px 1px 0px #000000;
+        font-family: monospace;
+        font-size: 2em;
+        white-space: nowrap; /* keeps everything on one line */
+    }
+</style>
+</head>
+<body>
+
+<div class="widget" id="widget"></div>
+
+<script>
+function updateWidget() {
+    const today = new Date();
+
+    // Greeting
+    const hrs = today.getHours();
+    let greet = hrs < 12 ? 'Good Morning, Rachelle' :
+                (hrs < 18 ? 'Good Afternoon, Rachelle' :
+                            'Good Evening, Rachelle');
+
+    // Date
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ["January","February","March","April","May","June",
+                    "July","August","September","October","November","December"];
+    const dayName = days[today.getDay()];
+    const monthName = months[today.getMonth()];
+    const date = today.getDate();
+    const year = today.getFullYear();
+
+    // Time
+    let hours = today.getHours() % 12 || 12;
+    let minutes = today.getMinutes();
+    let seconds = today.getSeconds();
+    const ampm = today.getHours() >= 12 ? 'PM' : 'AM';
+    hours = hours < 10 ? '0'+hours : hours;
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    seconds = seconds < 10 ? '0'+seconds : seconds;
+    const timeStr = `${hours}:${minutes}:${seconds} ${ampm}`;
+
+    // Combine everything
+    document.getElementById('widget').textContent =
+        `${greet}. Today is ${dayName}, ${monthName} ${date}, ${year}. The current time is ${timeStr}.`;
+}
+
+// Update every second
+setInterval(updateWidget, 1000);
+updateWidget();
+</script>
+
+</body>
 </html>
